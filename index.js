@@ -4,7 +4,8 @@ const { parse } = require('json2csv');
 const moment = require('moment');
 const readline = require('readline');
 
-const WRITE_JSON_FILE = false; // Set this to false if you don't want to write the JSON file
+const WRITE_JSON_FILE = false; // Set this to true if you want to write the full JSON file to disk.
+const csvFieldsArray = ['name', 'key', 'kind', 'creationDate', 'lastModified', 'deprecated', 'flagValue', 'rules', 'email'];
 
 let inquirer;
 
@@ -26,6 +27,7 @@ function formatFeatureFlags(items, env) {
     kind: i.kind,
     creationDate: moment(i.creationDate).format('YYYY-MM-DD HH:mm:ss'),
     lastModified: moment(i.environments[env].lastModified).format('YYYY-MM-DD HH:mm:ss'),
+    deprecated: i.deprecated.toString(),
     flagValue: i.environments[env].on.toString(),
     rules: formatRules(i.environments[env].rules),
     email: i._maintainer ? i._maintainer.email : 'NA'
@@ -47,7 +49,7 @@ async function writeFiles(env, data) {
 
   const featureFlagList = formatFeatureFlags(data.items, env);
   const csvFile = `${dir}/feature_flag_list_${env}.csv`;
-  const csv = parse(featureFlagList, { fields: ['name', 'key', 'kind', 'creationDate', 'lastModified', 'flagValue', 'rules', 'email'] });
+  const csv = parse(featureFlagList, { fields: csvFieldsArray });
   fs.writeFileSync(csvFile, csv);
   console.log(`Done! file saved: ${csvFile}`);
 }

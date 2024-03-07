@@ -25,6 +25,15 @@ This project is a utility for exporting feature flags from LaunchDarkly. It fetc
 3. Run the program with `node index.js`.
 4. Follow the prompts to fetch and export feature flags.
 
+## Extra information
+
+- Currently we extract the following columns: 'name', 'key', 'kind', 'creationDate', 'lastModified', 'deprecated', 'flagValue', 'rules', 'email'.
+That list is far from being the complete information being returned. In order to get the full raw JSON response, you can set the variable WRITE_JSON_FILE in index.js to true. In order to add more fields to the export, you would need to map the relevant piece of information in the formatFeatureFlags function, and add a title for it in the csvFieldsArray constant. Please note order of items is important, so if you add a new column in the end, make sure to add the new column name in the end as well.
+
+## Authentication
+
+- In order to authenticate yourself, you would need an API key or a Cookie. A Cookie can be easily achieved when visiting a webpage of LaunchDarkly that is making API requests. For example, if I visit this webpage: <https://app.launchdarkly.com/default/production-nl/features> with my DevTools open, I  will see a request to this URL: <https://app.launchdarkly.com/internal/command-bar-accesses>. In the request headers, under the Cookie section, you will find the Cookie's value. Just copy the whole value, and paste it in the tool when being asked to, and then press enter. The Cookie / Key are never being persistently stored and are used only during the run of the application in memory to be able to make API requests.
+
 ## Dependencies
 
 - axios: Used to send HTTP requests to the LaunchDarkly API.
