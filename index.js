@@ -4,8 +4,8 @@ const { parse } = require('json2csv');
 const moment = require('moment');
 const readline = require('readline');
 
-const WRITE_JSON_FILE = false; // Set this to true if you want to write the full JSON file to disk.
-const csvFieldsArray = ['name', 'key', 'kind', 'creationDate', 'lastModified', 'deprecated', 'flagValue', 'rules', 'email'];
+const WRITE_JSON_FILE = true; // Set this to true if you want to write the full JSON file to disk.
+const csvFieldsArray = ['name', 'key', 'kind', 'creationDate', 'lastModified', 'deprecated', 'deprecatedDate', 'flagValue', 'rules', 'email'];
 
 let inquirer;
 
@@ -28,6 +28,7 @@ function formatFeatureFlags(items, env) {
     creationDate: moment(i.creationDate).format('YYYY-MM-DD HH:mm:ss'),
     lastModified: moment(i.environments[env].lastModified).format('YYYY-MM-DD HH:mm:ss'),
     deprecated: i.deprecated.toString(),
+    deprecatedDate: i.deprecatedDate ? moment(i.deprecatedDate).format('YYYY-MM-DD HH:mm:ss') : '-',
     flagValue: i.environments[env].on.toString(),
     rules: formatRules(i.environments[env].rules),
     email: i._maintainer ? i._maintainer.email : 'NA'
